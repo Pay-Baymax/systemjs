@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * Interop for AMD modules to return the direct AMD binding instead of a
  * `{ default: amdModule }` object from `System.import`
  */
@@ -11,4 +11,4 @@
       return ns.__useDefault ? ns.default : ns;
     });
   };
-})(typeof self !== 'undefined' ? self : global);
+})(typeof self !== 'undefined' ? self : global);}());

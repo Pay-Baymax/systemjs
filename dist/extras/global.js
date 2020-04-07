@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * SystemJS global script loading support
  * Extra for the s.js build only
  * (Included by default in system.js build)
@@ -88,4 +88,4 @@
       };
     }];
   };
-})(typeof self !== 'undefined' ? self : global);
+})(typeof self !== 'undefined' ? self : global);}());

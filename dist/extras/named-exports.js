@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * Named exports support for legacy module formats in SystemJS 2.0
  */
 (function (global) {
@@ -54,4 +54,4 @@
     };
     return register;
   };
-})(typeof self !== 'undefined' ? self : global);
+})(typeof self !== 'undefined' ? self : global);}());

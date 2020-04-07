@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * SystemJS named register extension
  * Supports System.register('name', [..deps..], function (_export, _context) { ... })
  * 
@@ -70,5 +70,5 @@
     const result = firstNamedDefine || register;
     firstNamedDefine = null;
     return result;
-  }
-})(typeof self !== 'undefined' ? self : global);
+  };
+})(typeof self !== 'undefined' ? self : global);}());

@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * Support for AMD loading
  */
 (function (global) {
@@ -163,4 +163,4 @@
     System.registerRegistry[name] = System.getRegister();
     tmpRegister = null;
   }
-})(typeof self !== 'undefined' ? self : global);
+})(typeof self !== 'undefined' ? self : global);}());

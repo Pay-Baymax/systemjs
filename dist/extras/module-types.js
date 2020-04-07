@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * Loads JSON, CSS, Wasm module types based on file extensions
  * Supports application/javascript falling back to JS eval
  */
@@ -11,7 +11,7 @@
     const path = url.split('?')[0].split('#')[0];
     const ext = path.slice(path.lastIndexOf('.'));
     return ext.match(moduleTypesRegEx);
-  }
+  };
   systemJSPrototype.fetch = function (url) {
     return fetch(url);
   };
@@ -94,4 +94,4 @@
     }
     return instantiate.apply(this, arguments);
   };
-})(typeof self !== 'undefined' ? self : global);
+})(typeof self !== 'undefined' ? self : global);}());

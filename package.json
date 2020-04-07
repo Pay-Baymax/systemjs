@@ -24,10 +24,9 @@
     "whatwg-fetch": "^2.0.4"
   },
   "scripts": {
-    "build": "npm run build:systemjs && npm run build:sjs && npm run min && npm run build:extras",
-    "build:systemjs": "rollup -c",
-    "build:sjs": "rollup -c --environment sjs",
-    "build:extras": "bash minify-extras.sh",
+    "build": "rimraf dist && concurrently -n w: 'yarn:build:*'",
+    "build:browser:prod": "rollup -c",
+    "build:browser:dev": "rollup -c --environment dev",
     "min": "npm run min:systemjs && npm run min:sjs",
     "min:systemjs": "cd dist && terser system.js -c passes=2 -m --source-map --comments \"/SystemJS \\d/\" -o system.min.js",
     "min:sjs": "cd dist && terser s.js -c passes=2 -m --source-map -o s.min.js",
@@ -42,5 +41,11 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/systemjs"
+  },
+  "dependencies": {
+    "@rollup/plugin-replace": "^2.3.1",
+    "concurrently": "^5.1.0",
+    "rimraf": "^3.0.2",
+    "rollup-plugin-terser": "^5.3.0"
   }
 }

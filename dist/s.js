@@ -3,6 +3,8 @@
 * Minimal SystemJS Build
 */
 (function () {
+  'use strict';
+
   const hasSelf = typeof self !== 'undefined';
 
   const hasDocument = typeof document !== 'undefined';
@@ -165,6 +167,17 @@
     };
   };
 
+  // onLoad(err, id, deps) provided for tracing / hot-reloading
+  systemJSPrototype.onload = function () {};
+  function loadToId (load) {
+    return load.id;
+  }
+  function triggerOnload (loader, load, err) {
+    loader.onload(err, load.id, load.d && load.d.map(loadToId));
+    if (err)
+      throw err;
+  }
+
   let lastRegister;
   systemJSPrototype.register = function (deps, declare) {
     lastRegister = [deps, declare];
@@ -233,6 +246,10 @@
       load.e = declared.execute || function () {};
       return [registration[0], declared.setters || []];
     });
+
+    instantiatePromise = instantiatePromise.catch(function (err) {
+        triggerOnload(loader, load, err);
+      });
 
     const linkPromise = instantiatePromise
     .then(function (instantiation) {
@@ -347,9 +364,18 @@
     let depLoadPromises;
     load.d.forEach(function (depLoad) {
       {
-        const depLoadPromise = postOrderExec(loader, depLoad, seen);
-        if (depLoadPromise)
-          (depLoadPromises = depLoadPromises || []).push(depLoadPromise);
+        try {
+          const depLoadPromise = postOrderExec(loader, depLoad, seen);
+          if (depLoadPromise) {
+            depLoadPromise.catch(function (err) {
+              triggerOnload(loader, load, err);
+            });
+            (depLoadPromises = depLoadPromises || []).push(depLoadPromise);
+          }
+        }
+        catch (err) {
+          triggerOnload(loader, load, err);
+        }
       }
     });
     if (depLoadPromises)
@@ -363,14 +389,19 @@
         if (execPromise) {
           execPromise = execPromise.then(function () {
               load.C = load.n;
-              load.E = null;
+              load.E = null; // indicates completion
+              triggerOnload(loader, load, null);
+            }, function (err) {
+              triggerOnload(loader, load, err);
             });
           return load.E = load.E || execPromise;
         }
         // (should be a promise, but a minify optimization to leave out Promise.resolve)
         load.C = load.n;
+        triggerOnload(loader, load, null);
       }
       catch (err) {
+        triggerOnload(loader, load, err);
         load.er = err;
         throw err;
       }

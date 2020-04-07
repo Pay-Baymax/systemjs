@@ -2,6 +2,8 @@
 * SystemJS 6.2.6
 */
 (function () {
+  'use strict';
+
   const hasSelf = typeof self !== 'undefined';
 
   const hasDocument = typeof document !== 'undefined';

@@ -1,4 +1,4 @@
-/*
+(function(){'use strict';/*
  * Support for a "transform" loader interface
  */
 (function (global) {
@@ -29,4 +29,4 @@
   systemJSPrototype.transform = function (_id, source) {
     return source;
   };
-})(typeof self !== 'undefined' ? self : global);
+})(typeof self !== 'undefined' ? self : global);}());
